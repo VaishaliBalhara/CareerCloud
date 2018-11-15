@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicantEducationRepository.cs" />
+    <Compile Include="ApplicantJobApplicationRepository.cs" />
     <Compile Include="BaseADO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
