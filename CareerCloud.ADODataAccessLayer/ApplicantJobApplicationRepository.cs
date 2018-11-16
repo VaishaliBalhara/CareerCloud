@@ -18,6 +18,19 @@ namespace CareerCloud.ADODataAccessLayer
                 SqlCommand command = new SqlCommand();
                 command.Connection = conn;
 
+                foreach(ApplicantJobApplicationPoco poco in items)
+                {
+                    command.CommandText = @"INSERT INTO [dbo].[Applicant_Job_Applications]([Id],[Applicant],[Job],[Application_Date] 
+                    VALUES (@Id, @Applicant, @Job, @Application_Date)";
+                    command.Parameters.AddWithValue("@Id", poco.Id);
+                    command.Parameters.AddWithValue("@Applicant", poco.Applicant);
+                    command.Parameters.AddWithValue("@Job", poco.ApplicationDate);
+
+                    conn.Open();
+                    int rowEffected = command.ExecuteNonQuery();
+                    conn.Close();
+
+                }
             }
         }
 
