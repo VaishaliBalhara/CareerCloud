@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CareerCloud.ADODataAccessLayer
 {
-    class SecurityLoginsLogRepository : BaseADO, IDataRepository<SecurityLoginsLogPoco>
+    public class SecurityLoginsLogRepository : BaseADO, IDataRepository<SecurityLoginsLogPoco>
     {
         public void Add(params SecurityLoginsLogPoco[] items)
         {
@@ -21,7 +21,7 @@ namespace CareerCloud.ADODataAccessLayer
 
                 foreach(SecurityLoginsLogPoco poco in items)
                 {
-                    command.CommandText = @"INSERT INTO [dbo].[Security_Logins_Log] ([Id],p[Login],[Source_IP],[Logon_Date],[Is_Succesful]
+                    command.CommandText = @"INSERT INTO [dbo].[Security_Logins_Log] ([Id],[Login],[Source_IP],[Logon_Date],[Is_Succesful])
                     VALUES (@Id,@Login,@SourceIP,@LogonDate,@IsSuccesful)";
 
                     command.Parameters.AddWithValue(@"Id", poco.Id);
@@ -44,13 +44,14 @@ namespace CareerCloud.ADODataAccessLayer
 
         public IList<SecurityLoginsLogPoco> GetAll(params Expression<Func<SecurityLoginsLogPoco, object>>[] navigationProperties)
         {
-            SecurityLoginsLogPoco[] pocos = new SecurityLoginsLogPoco[500];
+            SecurityLoginsLogPoco[] pocos = new SecurityLoginsLogPoco[1800];
 
             using (SqlConnection conn = new SqlConnection(connString))
             {
                 SqlCommand command = new SqlCommand("Select * from Security_Logins_log", conn);
                 int position = 0;
 
+                conn.Open();
                 SqlDataReader reader = command.ExecuteReader();
 
                 while(reader.Read())
@@ -66,8 +67,9 @@ namespace CareerCloud.ADODataAccessLayer
                     pocos[position] = poco;
                     position++;
                 }
+                conn.Close();
             }
-            return pocos.ToList();
+            return pocos.Where(a=>a!=null).ToList();
         }
 
         public IList<SecurityLoginsLogPoco> GetList(Expression<Func<SecurityLoginsLogPoco, bool>> where, params Expression<Func<SecurityLoginsLogPoco, object>>[] navigationProperties)
@@ -77,17 +79,55 @@ namespace CareerCloud.ADODataAccessLayer
 
         public SecurityLoginsLogPoco GetSingle(Expression<Func<SecurityLoginsLogPoco, bool>> where, params Expression<Func<SecurityLoginsLogPoco, object>>[] navigationProperties)
         {
-            throw new NotImplementedException();
+            IQueryable<SecurityLoginsLogPoco> pocos = GetAll().AsQueryable();
+            return pocos.Where(where).FirstOrDefault();
         }
 
         public void Remove(params SecurityLoginsLogPoco[] items)
         {
-            throw new NotImplementedException();
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+
+                SqlCommand command = new SqlCommand();
+                command.Connection = conn;
+
+                foreach (SecurityLoginsLogPoco poco in items)
+                {
+                    command.CommandText = @"DELETE from [JOB_PORTAL_DB].[dbo].[Security_Logins_log] where Id=@Id";
+                    command.Parameters.AddWithValue("@Id", poco.Id);
+
+                    conn.Open();
+                    int rowEffected = command.ExecuteNonQuery();
+                    conn.Close();
+
+                }
+            }
         }
 
         public void Update(params SecurityLoginsLogPoco[] items)
         {
-            throw new NotImplementedException();
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                SqlCommand command = new SqlCommand();
+                command.Connection = conn;
+
+                foreach (SecurityLoginsLogPoco poco in items)
+                {
+                    command.CommandText = @"UPDATE [JOB_PORTAL_DB].[dbo].[Security_Logins_log] SET 
+                                            Login=@Login, Source_IP=@SourceIP, Logon_Date=@LogonDate,
+                                            Is_Succesful=@IsSuccesful  WHERE ID=@Id";
+
+                    command.Parameters.AddWithValue("@Login", poco.Login);
+                    command.Parameters.AddWithValue("@SourceIP", poco.SourceIP);
+                    command.Parameters.AddWithValue("@LogonDate", poco.LogonDate);
+                    command.Parameters.AddWithValue("@IsSuccesful", poco.IsSuccesful);
+                    command.Parameters.AddWithValue("@Id", poco.Id);
+
+                    conn.Open();
+                    int rowEffected = command.ExecuteNonQuery();
+                    conn.Close();
+                }
+            }
         }
     }
 }

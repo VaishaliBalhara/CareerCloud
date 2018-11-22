@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CareerCloud.ADODataAccessLayer
 {
-    class ApplicantJobApplicationRepository : BaseADO, IDataRepository<ApplicantJobApplicationPoco>
+   public class ApplicantJobApplicationRepository : BaseADO, IDataRepository<ApplicantJobApplicationPoco>
     {
         public void Add(params ApplicantJobApplicationPoco[] items)
         {
@@ -20,11 +20,12 @@ namespace CareerCloud.ADODataAccessLayer
 
                 foreach(ApplicantJobApplicationPoco poco in items)
                 {
-                    command.CommandText = @"INSERT INTO [dbo].[Applicant_Job_Applications]([Id],[Applicant],[Job],[Application_Date] 
+                    command.CommandText = @"INSERT INTO [JOB_PORTAL_DB].[dbo].[Applicant_Job_Applications]([Id],[Applicant],[Job],[Application_Date]) 
                     VALUES (@Id, @Applicant, @Job, @Application_Date)";
                     command.Parameters.AddWithValue("@Id", poco.Id);
                     command.Parameters.AddWithValue("@Applicant", poco.Applicant);
-                    command.Parameters.AddWithValue("@Job", poco.ApplicationDate);
+                    command.Parameters.AddWithValue("@Job", poco.Job);
+                    command.Parameters.AddWithValue("@Application_Date", poco.ApplicationDate);
 
                     conn.Open();
                     int rowEffected = command.ExecuteNonQuery();
@@ -44,9 +45,10 @@ namespace CareerCloud.ADODataAccessLayer
             ApplicantJobApplicationPoco[] pocos = new ApplicantJobApplicationPoco[500];
             using (SqlConnection conn = new SqlConnection(connString))
             {
-                SqlCommand command = new SqlCommand("Select * from Applicant_Job_Applications", conn);
+                SqlCommand command = new SqlCommand("Select * from [JOB_PORTAL_DB].[dbo].[Applicant_Job_Applications]", conn);
                 int position = 0;
 
+                conn.Open();
                 SqlDataReader reader = command.ExecuteReader();
 
                 while(reader.Read())
@@ -62,8 +64,9 @@ namespace CareerCloud.ADODataAccessLayer
                     position++;
 
                 }
+                conn.Close();
             }
-            return pocos.ToList();
+            return pocos.Where(a => a!= null).ToList();
         }
 
         public IList<ApplicantJobApplicationPoco> GetList(System.Linq.Expressions.Expression<Func<ApplicantJobApplicationPoco, bool>> where, params System.Linq.Expressions.Expression<Func<ApplicantJobApplicationPoco, object>>[] navigationProperties)
@@ -73,17 +76,52 @@ namespace CareerCloud.ADODataAccessLayer
 
         public ApplicantJobApplicationPoco GetSingle(System.Linq.Expressions.Expression<Func<ApplicantJobApplicationPoco, bool>> where, params System.Linq.Expressions.Expression<Func<ApplicantJobApplicationPoco, object>>[] navigationProperties)
         {
-            throw new NotImplementedException();
+            IQueryable<ApplicantJobApplicationPoco> pocos = GetAll().AsQueryable();
+            return pocos.Where(where).FirstOrDefault();
         }
 
         public void Remove(params ApplicantJobApplicationPoco[] items)
         {
-            throw new NotImplementedException();
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                SqlCommand command = new SqlCommand();
+                command.Connection = conn;
+                
+                foreach (ApplicantJobApplicationPoco poco in items)
+                {
+                    command.CommandText = @"DELETE from [JOB_PORTAL_DB].[dbo].[Applicant_Job_Applications] where Id=@Id";
+
+                    command.Parameters.AddWithValue("@Id", poco.Id);
+
+                    conn.Open();
+                    int rowEffected = command.ExecuteNonQuery();
+                    conn.Close();
+                }
+            }
         }
 
         public void Update(params ApplicantJobApplicationPoco[] items)
         {
-            throw new NotImplementedException();
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                SqlCommand command = new SqlCommand();
+                command.Connection = conn;
+
+                foreach (ApplicantJobApplicationPoco poco in items)
+                {
+                    command.CommandText = @"UPDATE Applicant_Job_Applications SET Applicant=@Applicant,
+                        Job=@Job, Application_Date=@ApplicationDate WHERE Id=@Id";
+
+                    command.Parameters.AddWithValue("@Applicant", poco.Applicant);
+                    command.Parameters.AddWithValue("@Job", poco.Job);
+                    command.Parameters.AddWithValue("@ApplicationDate", poco.ApplicationDate);
+                    command.Parameters.AddWithValue("@Id", poco.Id);
+
+                    conn.Open();
+                    int rowEffected = command.ExecuteNonQuery();
+                    conn.Close();
+                }
+            }
         }
     }
 }

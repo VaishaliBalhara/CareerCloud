@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CareerCloud.ADODataAccessLayer
 {
-    class ApplicantWorkHistoryRepository : BaseADO, IDataRepository<ApplicantWorkHistoryPoco>
+    public class ApplicantWorkHistoryRepository : BaseADO, IDataRepository<ApplicantWorkHistoryPoco>
     {
         public void Add(params ApplicantWorkHistoryPoco[] items)
         {
@@ -19,9 +19,9 @@ namespace CareerCloud.ADODataAccessLayer
                 SqlCommand command = new SqlCommand();
                 command.Connection = conn;
 
-                foreach(ApplicantWorkHistoryPoco poco in itmes)
+                foreach(ApplicantWorkHistoryPoco poco in items)
                 {
-                    command.CommandText = @"INSERT INTO [dbo].[Applicant_Work_History] ([Id],[Applicant], [Comapny_Name], [Country_Code], [Location], [Job_Title], [Job_Description], [Start_Month], [Start_Year], [End_Month], [End_Year]
+                    command.CommandText = @"INSERT INTO [dbo].[Applicant_Work_History] ([Id],[Applicant], [Company_Name], [Country_Code], [Location], [Job_Title], [Job_Description], [Start_Month], [Start_Year], [End_Month], [End_Year])
                     VALUES (@Id, @Applicant, @CompanyName, @COuntryCode, @Location, @JobTitle, @JobDescription, @StartMonth, @StartYear, @EndMonth, @EndYear)";
 
                     command.Parameters.AddWithValue(@"Id", poco.Id);
@@ -56,6 +56,7 @@ namespace CareerCloud.ADODataAccessLayer
             {
                 SqlCommand command = new SqlCommand("Select * from Applicant_Work_History", conn);
                 int position = 0;
+                conn.Open();
 
                 SqlDataReader reader = command.ExecuteReader();
                 while(reader.Read())
@@ -70,17 +71,18 @@ namespace CareerCloud.ADODataAccessLayer
                     poco.JobTitle = reader.GetString(5);
                     poco.JobDescription = reader.GetString(6);
                     poco.StartMonth = reader.GetInt16(7);
-                    poco.StartYear = reader.GetInt16(8);
+                    poco.StartYear = reader.GetInt32(8);
                     poco.EndMonth = reader.GetInt16(9);
-                    poco.EndYear = reader.GetInt16(10);
+                    poco.EndYear = reader.GetInt32(10);
                     poco.TimeStamp = (byte[])reader[11];
 
                     pocos[position] = poco;
                     position++;
                 }
-
+                conn.Close();
             }
-            return pocos.ToList();
+            
+            return pocos.Where(a=>a!=null).ToList();
         }
 
         public IList<ApplicantWorkHistoryPoco> GetList(Expression<Func<ApplicantWorkHistoryPoco, bool>> where, params Expression<Func<ApplicantWorkHistoryPoco, object>>[] navigationProperties)
@@ -90,17 +92,62 @@ namespace CareerCloud.ADODataAccessLayer
 
         public ApplicantWorkHistoryPoco GetSingle(Expression<Func<ApplicantWorkHistoryPoco, bool>> where, params Expression<Func<ApplicantWorkHistoryPoco, object>>[] navigationProperties)
         {
-            throw new NotImplementedException();
+            IQueryable<ApplicantWorkHistoryPoco> pocos = GetAll().AsQueryable();
+            return pocos.Where(where).FirstOrDefault();
         }
 
         public void Remove(params ApplicantWorkHistoryPoco[] items)
         {
-            throw new NotImplementedException();
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+
+                SqlCommand command = new SqlCommand();
+                command.Connection = conn;
+
+                foreach (ApplicantWorkHistoryPoco poco in items)
+                {
+                    command.CommandText = @"DELETE from [JOB_PORTAL_DB].[dbo].[Applicant_Work_History] where Id=@Id";
+                    command.Parameters.AddWithValue("@Id", poco.Id);
+
+                    conn.Open();
+                    int rowEffected = command.ExecuteNonQuery();
+                    conn.Close();
+
+                }
+            }
         }
 
         public void Update(params ApplicantWorkHistoryPoco[] items)
         {
-            throw new NotImplementedException();
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                SqlCommand command = new SqlCommand();
+                command.Connection = conn;
+
+                foreach (ApplicantWorkHistoryPoco poco in items)
+                {
+                    command.CommandText = @"UPDATE [JOB_PORTAL_DB].[dbo].[Applicant_Work_History] SET Applicant=@Applicant,
+                                            Company_Name=@CompanyName, Country_Code=@CountryCode,
+                                            Location=@Location, Job_Title=@JobTitle, Job_Description=@JobDescription,
+                                            Start_Month=@StartMonth, Start_Year=@StartYear,
+                                            End_Month=@EndMonth, End_Year=@EndYear WHERE ID=@Id";
+                    command.Parameters.AddWithValue("@Applicant", poco.Applicant);
+                    command.Parameters.AddWithValue("@CompanyName", poco.CompanyName);
+                    command.Parameters.AddWithValue("@CountryCode", poco.CountryCode);
+                    command.Parameters.AddWithValue("@Location", poco.Location);
+                    command.Parameters.AddWithValue("@JobTitle", poco.JobTitle);
+                    command.Parameters.AddWithValue("@JobDescription", poco.JobDescription);
+                    command.Parameters.AddWithValue("@StartMonth", poco.StartMonth);
+                    command.Parameters.AddWithValue("@StartYear", poco.StartYear);
+                    command.Parameters.AddWithValue("@EndMonth", poco.EndMonth);
+                    command.Parameters.AddWithValue("@EndYear", poco.EndYear);
+                    command.Parameters.AddWithValue("@Id", poco.Id);
+
+                    conn.Open();
+                    int rowEffected = command.ExecuteNonQuery();
+                    conn.Close();
+                }
+            }
         }
     }
 }

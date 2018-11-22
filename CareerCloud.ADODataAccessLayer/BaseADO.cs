@@ -12,7 +12,7 @@ namespace CareerCloud.ADODataAccessLayer
 
         public BaseADO()
         {
-            connString = @"Data Source=.\HUMBERBRIDGING;Initial Catalog=JOB_PORTAL_DB;Integrated Security=True;";
+            connString = @"Data Source=.\HUMBERBRIDGING;Initial Catalog=JOB_PORTAL_DB;Integrated Security=True";
         }
     }
 }
