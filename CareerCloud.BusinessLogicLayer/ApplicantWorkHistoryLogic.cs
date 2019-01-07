@@ -8,32 +8,32 @@ using System.Threading.Tasks;
 
 namespace CareerCloud.BusinessLogicLayer
 {
-    public class ApplicantResumeLogic:BaseLogic<ApplicantResumePoco>
+    public class ApplicantWorkHistoryLogic:BaseLogic<ApplicantWorkHistoryPoco>
     {
-        public ApplicantResumeLogic(IDataRepository<ApplicantResumePoco> repository) : base(repository)
+        public ApplicantWorkHistoryLogic(IDataRepository<ApplicantWorkHistoryPoco> repository) : base(repository)
         {
         }
 
-        public override void Add(ApplicantResumePoco[] pocos)
+        public override void Add(ApplicantWorkHistoryPoco[] pocos)
         {
             Verify(pocos);
             base.Add(pocos);
         }
 
-        public override void Update(ApplicantResumePoco[] pocos)
+        public override void Update(ApplicantWorkHistoryPoco[] pocos)
         {
             Verify(pocos);
             base.Update(pocos);
         }
 
-        protected override void Verify(ApplicantResumePoco[] pocos)
+        protected override void Verify(ApplicantWorkHistoryPoco[] pocos)
         {
             List<ValidationException> exceptions = new List<ValidationException>();
-            foreach (ApplicantResumePoco item in pocos)
+            foreach (ApplicantWorkHistoryPoco item in pocos)
             {
-                if (item.Resume==null)
+                if (item.CompanyName.Length>2)
                 {
-                    exceptions.Add(new ValidationException(113, "Resume can not be empty"));
+                    exceptions.Add(new ValidationException(105, "Company Name can not be less than 2 chars"));
                 }
 
                 if (exceptions.Count > 0)
