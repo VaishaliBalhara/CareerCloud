@@ -46,7 +46,7 @@ namespace CareerCloud.BusinessLogicLayer
                 }
                 if(exceptions.Count>0)
                 {
-                    throw new AggregateException(exceptions);
+                    throw new AggregateException(exceptions); 
                 }
             }
         }
