@@ -10,7 +10,7 @@ namespace CareerCloud.BusinessLogicLayer
 {
     public class CompanyDescriptionLogic:BaseLogic<CompanyDescriptionPoco>
     {
-        public CompanyDescriptionLogic(IDataRepository<ApplicantResumePoco> repository) : base(repository)
+        public CompanyDescriptionLogic(IDataRepository<CompanyDescriptionPoco> repository) : base(repository)
         {
         }
 
@@ -31,12 +31,19 @@ namespace CareerCloud.BusinessLogicLayer
             List<ValidationException> exceptions = new List<ValidationException>();
             foreach (CompanyDescriptionPoco item in pocos)
             {
-                if (item.CompanyDescription.Length>2)
+                if (string.IsNullOrEmpty(item.CompanyDescription))
                 {
                     exceptions.Add(new ValidationException(107, $"Company description {item.CompanyDescription} must be greater than 2 chars"));
                 }
-
-                if (item.CompanyName.Length > 2)
+                else if (item.CompanyDescription.Length<3)
+                {
+                    exceptions.Add(new ValidationException(107, $"Company description {item.CompanyDescription} must be greater than 2 chars"));
+                }
+                if (string.IsNullOrEmpty(item.CompanyName))
+                {
+                    exceptions.Add(new ValidationException(107, $"Company Name {item.CompanyName} must be greater than 2 chars"));
+                }
+                else if (item.CompanyName.Length < 3)
                 {
                     exceptions.Add(new ValidationException(106, $"Company name {item.CompanyName} must be greater than 2 chars"));
                 }

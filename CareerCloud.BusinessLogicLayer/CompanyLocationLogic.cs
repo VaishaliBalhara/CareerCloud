@@ -31,27 +31,27 @@ namespace CareerCloud.BusinessLogicLayer
             List<ValidationException> exceptions = new List<ValidationException>();
             foreach (CompanyLocationPoco item in pocos)
             {
-                if (item.CountryCode.Length<0)
+                if (string.IsNullOrEmpty( item.CountryCode))
                 {
                     exceptions.Add(new ValidationException(500, $"Country code {item.CountryCode} can not be empty"));
                 }
 
-                if (item.Province.Length<0)
+                if (string.IsNullOrEmpty(item.Province))
                 {
                     exceptions.Add(new ValidationException(501, $"Province {item.Province} can not be empty"));
                 }
 
-                if (item.Street.Length < 0)
+                if (string.IsNullOrEmpty(item.Street))
                 {
                     exceptions.Add(new ValidationException(502, $"Street {item.Street} can not be empty"));
                 }
 
-                if (item.City.Length < 0)
+                if ( string.IsNullOrEmpty(item.City))
                 {
                     exceptions.Add(new ValidationException(503, $"City {item.City} can not be empty"));
                 }
 
-                if (item.PostalCode.Length<0)
+                if (string.IsNullOrEmpty(item.PostalCode))
                 {
                     exceptions.Add(new ValidationException(504, $"Postal code {item.PostalCode} can not be empty"));
                 }

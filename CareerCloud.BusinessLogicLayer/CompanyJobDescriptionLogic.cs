@@ -31,12 +31,12 @@ namespace CareerCloud.BusinessLogicLayer
             List<ValidationException> exceptions = new List<ValidationException>();
             foreach (CompanyJobDescriptionPoco item in pocos)
             {
-                if (item.JobName.Length<1)
+                if (string.IsNullOrEmpty(item.JobName))
                 {
                     exceptions.Add(new ValidationException(300, $"Job name {item.JobName} cannot be empty"));
                 }
 
-                if (item.JobDescriptions.Length < 1)
+                if (string.IsNullOrEmpty(item.JobDescriptions))
                 {
                     exceptions.Add(new ValidationException(301, $"Job description {item.JobDescriptions} cannot be empty"));
                 }

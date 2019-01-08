@@ -8,11 +8,11 @@ namespace CareerCloud.BusinessLogicLayer
 {
     public class ValidationException:Exception
     {
-        public int code { get; private set; }
+        public int Code { get; private set; }
 
-        public ValidationException(int code, string message):base(message)
+        public ValidationException(int Code, string message):base(message)
         {
-            this.code = code;
+            this.Code = Code;
         }
 
         

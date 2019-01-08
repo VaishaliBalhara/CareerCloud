@@ -8,27 +8,27 @@ using System.Threading.Tasks;
 
 namespace CareerCloud.BusinessLogicLayer
 {
-    public class CompanyJobLogic:BaseLogic<CompanyJobPoco>
+    public class SecurityLoginsRoleLogic : BaseLogic<SecurityLoginsRolePoco>
     {
-        public CompanyJobLogic(IDataRepository<CompanyJobPoco> repository) : base(repository)
+        public SecurityLoginsRoleLogic(IDataRepository<SecurityLoginsRolePoco> repository) : base(repository)
         {
         }
 
-        public override void Add(CompanyJobPoco[] pocos)
+        public override void Add(SecurityLoginsRolePoco[] pocos)
         {
             Verify(pocos);
             base.Add(pocos);
         }
 
-        public override void Update(CompanyJobPoco[] pocos)
+        public override void Update(SecurityLoginsRolePoco[] pocos)
         {
             Verify(pocos);
             base.Update(pocos);
         }
 
-        protected override void Verify(CompanyJobPoco[] pocos)
+        protected override void Verify(SecurityLoginsRolePoco[] pocos)
         {
-            
+
         }
     }
 }
