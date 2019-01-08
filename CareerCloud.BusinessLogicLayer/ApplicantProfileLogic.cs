@@ -33,12 +33,12 @@ namespace CareerCloud.BusinessLogicLayer
             {
                 if (item.CurrentSalary<0)
                 {
-                    exceptions.Add(new ValidationException(111, "Current salary can not be negative"));
+                    exceptions.Add(new ValidationException(111, $"Current salary ie, {item.CurrentRate} can not be negative"));
                 }
 
                 if (item.CurrentRate<0)
                 {
-                    exceptions.Add(new ValidationException(112, "Current rate can not be negative"));
+                    exceptions.Add(new ValidationException(112, $"Current rate given - {item.CurrentRate} can not be negative"));
                 }
 
                 if (exceptions.Count > 0)

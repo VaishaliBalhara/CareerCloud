@@ -33,7 +33,7 @@ namespace CareerCloud.BusinessLogicLayer
             {
                 if (item.Resume==null)
                 {
-                    exceptions.Add(new ValidationException(113, "Resume can not be empty"));
+                    exceptions.Add(new ValidationException(113, $"Resume {item.Resume} can not be empty"));
                 }
 
                 if (exceptions.Count > 0)

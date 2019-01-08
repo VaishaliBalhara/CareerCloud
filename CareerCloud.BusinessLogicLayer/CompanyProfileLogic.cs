@@ -33,12 +33,12 @@ namespace CareerCloud.BusinessLogicLayer
             {
                 if (true)
                 {
-                    exceptions.Add(new ValidationException(600, "Website must end with '.ca','.com' or '.biz'"));
+                    exceptions.Add(new ValidationException(600, $"Website given {item.CompanyWebsite} must end with '.ca','.com' or '.biz'"));
                 }
 
                 if (true)
                 {
-                    exceptions.Add(new ValidationException(601, "Not a valid phone number"));
+                    exceptions.Add(new ValidationException(601, $"{item.ContactPhone} Not a valid phone number"));
                 }
 
                 if (exceptions.Count > 0)

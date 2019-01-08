@@ -33,7 +33,7 @@ namespace CareerCloud.BusinessLogicLayer
             {
                 if (item.CompanyName.Length>2)
                 {
-                    exceptions.Add(new ValidationException(105, "Company Name can not be less than 2 chars"));
+                    exceptions.Add(new ValidationException(105, $"Company Name {item.CompanyName} can not be less than 2 chars"));
                 }
 
                 if (exceptions.Count > 0)

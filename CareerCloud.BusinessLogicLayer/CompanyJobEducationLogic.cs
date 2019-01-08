@@ -33,12 +33,12 @@ namespace CareerCloud.BusinessLogicLayer
             {
                 if (item.Major.Length<2)
                 {
-                    exceptions.Add(new ValidationException(200, "Cannot be less than 2 chars"));
+                    exceptions.Add(new ValidationException(200, $"{item.Major} Cannot be less than 2 chars"));
                 }
 
                 if (item.Importance<0)
                 {
-                    exceptions.Add(new ValidationException(201, "Cannot be less than zero"));
+                    exceptions.Add(new ValidationException(201, $"{item.Importance} Cannot be less than zero"));
                 }
                 if (exceptions.Count > 0)
                 {

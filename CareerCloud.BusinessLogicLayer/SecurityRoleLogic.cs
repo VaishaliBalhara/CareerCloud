@@ -8,32 +8,32 @@ using System.Threading.Tasks;
 
 namespace CareerCloud.BusinessLogicLayer
 {
-    public class CompanyJobSkillLogic:BaseLogic<CompanyJobSkillPoco>
+    public class SecurityRoleLogic:BaseLogic<SecurityRolePoco>
     {
-        public CompanyJobSkillLogic(IDataRepository<CompanyJobSkillPoco> repository) : base(repository)
+        public SecurityRoleLogic(IDataRepository<SecurityRolePoco> repository) : base(repository)
         {
         }
 
-        public override void Add(CompanyJobSkillPoco[] pocos)
+        public override void Add(SecurityRolePoco[] pocos)
         {
             Verify(pocos);
             base.Add(pocos);
         }
 
-        public override void Update(CompanyJobSkillPoco[] pocos)
+        public override void Update(SecurityRolePoco[] pocos)
         {
             Verify(pocos);
             base.Update(pocos);
         }
 
-        protected override void Verify(CompanyJobSkillPoco[] pocos)
+        protected override void Verify(SecurityRolePoco[] pocos)
         {
             List<ValidationException> exceptions = new List<ValidationException>();
-            foreach (CompanyJobSkillPoco item in pocos)
+            foreach (SecurityRolePoco item in pocos)
             {
-                if (item.Importance<0)
+                if (item.Role.Length<1)
                 {
-                    exceptions.Add(new ValidationException(400, $"Importance {item.Importance} can not be less than zero"));
+                    exceptions.Add(new ValidationException(800, $"Role {item.Role} can not be empty"));
                 }
 
                 if (exceptions.Count > 0)

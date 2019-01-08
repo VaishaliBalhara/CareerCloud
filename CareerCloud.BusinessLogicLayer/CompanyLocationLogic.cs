@@ -33,27 +33,27 @@ namespace CareerCloud.BusinessLogicLayer
             {
                 if (item.CountryCode.Length<0)
                 {
-                    exceptions.Add(new ValidationException(500, "Country code can not be empty"));
+                    exceptions.Add(new ValidationException(500, $"Country code {item.CountryCode} can not be empty"));
                 }
 
                 if (item.Province.Length<0)
                 {
-                    exceptions.Add(new ValidationException(501, "Province can not be empty"));
+                    exceptions.Add(new ValidationException(501, $"Province {item.Province} can not be empty"));
                 }
 
                 if (item.Street.Length < 0)
                 {
-                    exceptions.Add(new ValidationException(502, "Street can not be empty"));
+                    exceptions.Add(new ValidationException(502, $"Street {item.Street} can not be empty"));
                 }
 
                 if (item.City.Length < 0)
                 {
-                    exceptions.Add(new ValidationException(503, "City can not be empty"));
+                    exceptions.Add(new ValidationException(503, $"City {item.City} can not be empty"));
                 }
 
                 if (item.PostalCode.Length<0)
                 {
-                    exceptions.Add(new ValidationException(504, "Postal code can not be empty"));
+                    exceptions.Add(new ValidationException(504, $"Postal code {item.PostalCode} can not be empty"));
                 }
 
                 if (exceptions.Count > 0)
